@@ -374,7 +374,7 @@
       ja: { title:'🌺 沖縄観光名所16選 · 南国リゾート', settingsBtn:'画像設定', themeBtn:'ダーク/ライト', saveSettings:'保存して更新', back:'戻る', home:'ホーム', tipsLabel:'💡 おすすめポイント', metroLabel:'🚌 アクセス', officialLabel:'🔗 公式サイト', settingsTitle:'🖼️ 画像URLを設定', settingsDesc:'各スポットの画像URLを入力。空欄は絵文字表示。', footerText:'🌊 沖縄観光ガイド' }
     };
 
-    // 沖縄16スポット（データは前回と同じ）
+    // 沖縄16スポット (差し替え済み)
     const spotsDataRaw = [
       { id:"shuri_castle", emoji:"🏯", officialUrl:"https://oki-park.jp/shurijo/", metro_en:"Shuri Station (Yui Rail)", metro_ja:"ゆいレール 首里駅", name_en:"Shuri Castle", name_ja:"首里城", name_fr:"Château de Shuri", name_de:"Shuri-Schloss", name_it:"Castello di Shuri", name_ru:"Замок Сюри", desc_en:"Ryukyu Kingdom's royal palace, UNESCO World Heritage. Beautiful red-brick architecture.", desc_ja:"琉球王国の象徴、鮮やかな赤色の城。世界遺産。", tips_en:"Visit early morning. Take monorail.", tips_ja:"早朝がおすすめ。モノレールで。" },
       { id:"churaumi", emoji:"🐠", officialUrl:"https://churaumi.okinawa/", metro_en:"Bus from Naha Airport / Bus Terminal", metro_ja:"那覇空港・バスターミナルからバス", name_en:"Churaumi Aquarium", name_ja:"美ら海水族館", desc_en:"One of world's largest aquariums, huge whale sharks.", desc_ja:"巨大ジンベエザメで有名な水族館。", tips_en:"Check feeding times. Combine with Ocean Expo Park.", tips_ja:"餌やり時間をチェック。海洋博公園と一緒に。" },
@@ -384,13 +384,17 @@
       { id:"seifa_utaki", emoji:"⛩️", officialUrl:"https://www.visitokinawa.jp/", metro_en:"Car / Bus", metro_ja:"車・バス", name_en:"Seifa-Utaki", name_ja:"斎場御嶽", desc_en:"Sacred Ryukyu grove, power spot.", desc_ja:"琉球最高の聖地。パワースポット。", tips_en:"Wear comfortable shoes. Amazing triangular rock.", tips_ja:"歩きやすい靴で。三角岩が圧巻。" },
       { id:"blue_cave", emoji:"🐟", officialUrl:"https://www.blue-cave.info/", metro_en:"Bus to Onna Village", metro_ja:"恩納村行きバス", name_en:"Blue Cave", name_ja:"青の洞窟", desc_en:"Marine cave with magical blue light, snorkeling/diving.", desc_ja:"神秘的な青く光る洞窟。シュノーケリング。", tips_en:"Go early morning. Book tour in advance.", tips_ja:"早朝が透明度◎。ツアー予約必須。" },
       { id:"american_village", emoji:"🎡", officialUrl:"https://www.americanvillage.co.jp/", metro_en:"Minami-Furano Station", metro_ja:"美浜駅", name_en:"American Village", name_ja:"アメリカンビレッジ", desc_en:"Entertainment complex with Ferris wheel, shops, cafes.", desc_ja:"観覧車やカフェが並ぶ異国情緒あふれる街。", tips_en:"Night illuminations are gorgeous.", tips_ja:"夜景と観覧車がロマンチック。" },
-      { id:"shikinaen", emoji:"🌸", officialUrl:"https://shikinaen.jp/", metro_en:"Shikinaen-mae Bus Stop", metro_ja:"識名園前バス停", name_en:"Shikinaen Garden", name_ja:"識名園", desc_en:"Royal villa garden, tranquil pond and bridges.", desc_ja:"琉球王家の別邸。静かな池と橋。", tips_en:"Less crowded hidden gem.", tips_ja:"穴場。ゆったり散策。" },
-      { id:"heiwadori", emoji:"🍜", officialUrl:"https://naha-arcade.com/", metro_en:"Asahibashi Station", metro_ja:"旭橋駅", name_en:"Heiwadori Arcade", name_ja:"平和通り商店街", desc_en:"Retro shopping arcade, local street food.", desc_ja:"レトロなアーケード。沖縄の台所。", tips_en:"Try pig's feet (tebichi) and taco rice.", tips_ja:"てびち、タコライスを。" },
+      // 識名園 → 琉球ガラス村
+      { id:"ryukyu_glass", emoji:"🥃", officialUrl:"https://www.ryukyu-glass.co.jp/", metro_en:"Bus from Naha", metro_ja:"那覇からバス", name_en:"Ryukyu Glass Village", name_ja:"琉球ガラス村", name_fr:"Village du verre de Ryukyu", name_de:"Ryukyu-Glasdorf", name_it:"Villaggio del vetro di Ryukyu", name_ru:"Деревня стекла Рюкю", desc_en:"Traditional Ryukyu glass workshops, you can try glass blowing experience.", desc_ja:"伝統的な琉球ガラスの工房が集まる村。ガラス吹き体験も可能。", tips_en:"Perfect for souvenirs. Make your own unique glass.", tips_ja:"お土産にぴったり。自分だけのガラス作り体験。" },
+      // 平和通り商店街 → 波之上宮
+      { id:"naminoue_shrine", emoji:"⛩️", officialUrl:"https://naminouegu.jp/", metro_en:"Kencho-mae Station / Bus", metro_ja:"県庁前駅・バス", name_en:"Naminoue Shrine", name_ja:"波之上宮", name_fr:"Sanctuaire Naminoue", name_de:"Naminoue-Schrein", name_it:"Santuario Naminoue", name_ru:"Святилище Наминоуэ", desc_en:"Famous seaside shrine, overlooking Naminoue Beach. One of the Eight Ryukyu Shrines.", desc_ja:"海を見下ろす絶景の神社。琉球八社の一つ。", tips_en:"Beautiful at sunset. Get a unique sea-view goshuin.", tips_ja:"夕日が美しい。海が見える御朱印が人気。" },
       { id:"kerama_islands", emoji:"🏝️", officialUrl:"https://www.vill.zamami.okinawa.jp/", metro_en:"Ferry from Naha Tomari Port", metro_ja:"那覇泊港からフェリー", name_en:"Kerama Islands", name_ja:"慶良間諸島", name_fr:"Îles Kerama", name_de:"Kerama-Inseln", name_it:"Isole Kerama", name_ru:"Острова Керама", desc_en:"Pristine white sand, world-class snorkeling.", desc_ja:"透明度抜群のビーチ。海が宝石のよう。", tips_en:"Take a day trip ferry. Swim with sea turtles.", tips_ja:"日帰りフェリーあり。ウミガメに会える。" },
       { id:"kafu_banta", emoji:"🌅", officialUrl:"https://www.visitokinawa.jp/", metro_en:"Car / Bus from Naha", metro_ja:"車・バス", name_en:"Kafu Banta (Miyagi Island)", name_ja:"カフーバンタ（宮城島）", name_fr:"Kafu Banta (Île Miyagi)", name_de:"Kafu Banta (Miyagi-Insel)", name_it:"Kafu Banta (Isola Miyagi)", name_ru:"Кафу Банта (остров Мияги)", desc_en:"Dramatic cliff overlooking the sea, sunset spot.", desc_ja:"断崖から見える絶景の海。夕日スポット。", tips_en:"Great for photography. Windy.", tips_ja:"写真映え抜群。風が強い。" },
-      { id:"yomitan_pottery", emoji:"🏺", officialUrl:"https://www.yomitan.jp/", metro_en:"Bus from Naha", metro_ja:"那覇からバス", name_en:"Yomitan Pottery Village", name_ja:"読谷やちむんの里", desc_en:"Traditional Okinawan pottery workshops.", desc_ja:"伝統工芸・やちむんの窯元が集まる。", tips_en:"Try pottery painting experience.", tips_ja:"陶芸体験ができる。" },
+      // 読谷やちむんの里 → 辺戸岬
+      { id:"cape_hedo", emoji:"🗾", officialUrl:"https://www.visitokinawa.jp/", metro_en:"Car rental recommended / Bus from Nago", metro_ja:"レンタカー推奨 / 名護からバス", name_en:"Cape Hedo", name_ja:"辺戸岬", name_fr:"Cape Hedo", name_de:"Kap Hedo", name_it:"Capo Hedo", name_ru:"Мыс Хедо", desc_en:"Northernmost point of Okinawa Island. Dramatic cliffs and emerald sea.", desc_ja:"沖縄本島最北端。断崖絶壁とエメラルドグリーンの海。", tips_en:"Great view, strong winds. Check out the monument.", tips_ja:"景色抜群、風が強い。モニュメントも見どころ。" },
       { id:"urashima_yofore", emoji:"🏯", officialUrl:"https://www.urashima.jp/", metro_en:"Urasoe Station", metro_ja:"浦添駅", name_en:"Urasoe Yodore", name_ja:"浦添よーどれ", name_fr:"Urasoe Yodore", name_de:"Urasoe Yodore", name_it:"Urasoe Yodore", name_ru:"Урасое Ёдорэ", desc_en:"Sacred mausoleum of Ryukyu kings, hidden gem.", desc_ja:"琉球王の陵墓。歴史情緒あふれる。", tips_en:"Quiet and historical. Combine with Urasoe Castle ruins.", tips_ja:"静かで歴史を感じる。浦添城跡とセットで。" },
-      { id:"himeyuri", emoji:"🕊️", officialUrl:"https://www.himeyuri.or.jp/", metro_en:"Bus from Naha", metro_ja:"那覇からバス", name_en:"Himeyuri Peace Museum", name_ja:"ひめゆりの塔・資料館", desc_en:"Memorial for WWII student nurses, peace education.", desc_ja:"戦争の悲惨さと平和を伝える資料館。", tips_en:"Respectful visit. Learn about Battle of Okinawa.", tips_ja:"静かに見学を。沖縄戦を学ぶ。" },
+      // ひめゆりの塔 → 平和祈念公園
+      { id:"peace_park", emoji:"🕊️", officialUrl:"https://www.peace-museum.pref.okinawa.jp/", metro_en:"Bus from Naha (Peace Memorial Park)", metro_ja:"那覇からバス（平和祈念公園）", name_en:"Peace Memorial Park", name_ja:"平和祈念公園", name_fr:"Parc commémoratif de la paix", name_de:"Friedensgedenkpark", name_it:"Parco della Pace", name_ru:"Мемориальный парк мира", desc_en:"Site of the end of the Battle of Okinawa. Vast park with Cornerstone of Peace.", desc_ja:"沖縄戦終結の地。広大な公園と「平和の礎」。", tips_en:"Pay respects. Visit the museum and see the engraved names.", tips_ja:"静かに祈りを。資料館と名前が刻まれた平和の礎。" },
       { id:"okinawa_world", emoji:"🕳️", officialUrl:"https://www.gyokusendo.co.jp/", metro_en:"Bus from Naha", metro_ja:"那覇からバス", name_en:"Okinawa World", name_ja:"沖縄ワールド", desc_en:"Theme park with limestone cave, Habu snake show.", desc_ja:"鍾乳洞「玉泉洞」とハブショー。", tips_en:"Wear non-slip shoes in the cave.", tips_ja:"洞窟内は滑りやすい靴で。" }
     ];
 
@@ -418,7 +422,6 @@
         handle: '.drag-handle',
         animation: 200,
         onEnd: function() {
-          // ドラッグ終了後、DOMの新しい順序を取得して保存（再描画はしない）
           const newOrder = Array.from(container.children).map(card => card.getAttribute('data-id'));
           spotOrder = newOrder;
           localStorage.setItem('okinawa_spot_order', JSON.stringify(spotOrder));
@@ -441,7 +444,6 @@
         card.addEventListener('click', (e) => { if(!e.target.closest('.drag-handle')) showDetailView(spot.id); });
         container.appendChild(card);
       });
-      // 再描画後、Sortableを再初期化
       initSortable();
     }
 
