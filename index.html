@@ -20,13 +20,11 @@
       transition: background-color 0.2s, color 0.2s, border-color 0.2s;
     }
 
-    /* ノーマルフォント - システム標準 */
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.5;
     }
 
-    /* 南国リゾート：青のグラデーション */
     body.light {
       --bg-gradient: linear-gradient(135deg, #D4F1F9 0%, #A8E6CF 100%);
       --surface: rgba(255, 255, 255, 0.92);
@@ -64,7 +62,6 @@
       color: var(--text);
     }
 
-    /* ヘッダー */
     .app-header {
       padding: 1rem 1.5rem;
       background-color: var(--header-bg);
@@ -119,14 +116,12 @@
       border-color: var(--gold);
     }
 
-    /* メインコンテナ */
     .main-container {
       max-width: 1400px;
       margin: 2rem auto;
       padding: 0 1.5rem;
     }
 
-    /* 4×4 グリッド（横スクロールなし、基本4列。狭い画面では横スクロールで4列維持） */
     .spot-grid {
       display: grid;
       grid-template-columns: repeat(4, minmax(260px, 1fr));
@@ -134,7 +129,6 @@
       overflow-x: auto;
       padding-bottom: 0.5rem;
     }
-    /* カードデザイン */
     .spot-card {
       background: var(--surface);
       backdrop-filter: blur(4px);
@@ -195,7 +189,6 @@
       line-height: 1.4;
     }
 
-    /* 詳細画面 */
     .detail-view {
       max-width: 1000px;
       margin: 1rem auto;
@@ -381,7 +374,7 @@
       ja: { title:'🌺 沖縄観光名所16選 · 南国リゾート', settingsBtn:'画像設定', themeBtn:'ダーク/ライト', saveSettings:'保存して更新', back:'戻る', home:'ホーム', tipsLabel:'💡 おすすめポイント', metroLabel:'🚌 アクセス', officialLabel:'🔗 公式サイト', settingsTitle:'🖼️ 画像URLを設定', settingsDesc:'各スポットの画像URLを入力。空欄は絵文字表示。', footerText:'🌊 沖縄観光ガイド' }
     };
 
-    // 沖縄16スポット（データは前回と同じ。修正済み）
+    // 沖縄16スポット（データは前回と同じ）
     const spotsDataRaw = [
       { id:"shuri_castle", emoji:"🏯", officialUrl:"https://oki-park.jp/shurijo/", metro_en:"Shuri Station (Yui Rail)", metro_ja:"ゆいレール 首里駅", name_en:"Shuri Castle", name_ja:"首里城", name_fr:"Château de Shuri", name_de:"Shuri-Schloss", name_it:"Castello di Shuri", name_ru:"Замок Сюри", desc_en:"Ryukyu Kingdom's royal palace, UNESCO World Heritage. Beautiful red-brick architecture.", desc_ja:"琉球王国の象徴、鮮やかな赤色の城。世界遺産。", tips_en:"Visit early morning. Take monorail.", tips_ja:"早朝がおすすめ。モノレールで。" },
       { id:"churaumi", emoji:"🐠", officialUrl:"https://churaumi.okinawa/", metro_en:"Bus from Naha Airport / Bus Terminal", metro_ja:"那覇空港・バスターミナルからバス", name_en:"Churaumi Aquarium", name_ja:"美ら海水族館", desc_en:"One of world's largest aquariums, huge whale sharks.", desc_ja:"巨大ジンベエザメで有名な水族館。", tips_en:"Check feeding times. Combine with Ocean Expo Park.", tips_ja:"餌やり時間をチェック。海洋博公園と一緒に。" },
@@ -401,7 +394,6 @@
       { id:"okinawa_world", emoji:"🕳️", officialUrl:"https://www.gyokusendo.co.jp/", metro_en:"Bus from Naha", metro_ja:"那覇からバス", name_en:"Okinawa World", name_ja:"沖縄ワールド", desc_en:"Theme park with limestone cave, Habu snake show.", desc_ja:"鍾乳洞「玉泉洞」とハブショー。", tips_en:"Wear non-slip shoes in the cave.", tips_ja:"洞窟内は滑りやすい靴で。" }
     ];
 
-    // 正式なspotsData配列を構築
     const spotsData = spotsDataRaw.map(s => ({
       id: s.id, emoji: s.emoji, officialUrl: s.officialUrl,
       metro: { en: s.metro_en, ja: s.metro_ja, fr: s.metro_en || s.metro_ja, de: s.metro_en || s.metro_ja, it: s.metro_en || s.metro_ja, ru: s.metro_en || s.metro_ja },
@@ -416,19 +408,22 @@
 
     function getImageForSpot(id) { return customImages[id] || null; }
 
-    function updateUILanguage() {
-      const tr = t[currentLang];
-      document.getElementById('app-title').innerText = tr.title;
-      document.getElementById('settings-btn-text').innerText = tr.settingsBtn;
-      document.getElementById('theme-toggle-text').innerText = tr.themeBtn;
-      document.getElementById('save-settings-text').innerText = tr.saveSettings;
-      document.getElementById('close-settings-text').innerText = tr.back;
-      document.getElementById('settings-title').innerText = tr.settingsTitle;
-      document.getElementById('settings-desc').innerText = tr.settingsDesc;
-      document.getElementById('footer-text').innerHTML = `${tr.footerText}<br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a>`;
-      renderHome();
-      const curId = document.getElementById('detail-view').getAttribute('data-spot-id');
-      if (!document.getElementById('home-view').classList.contains('hidden') && curId) showDetailView(curId);
+    let sortableInstance = null;
+
+    function initSortable() {
+      const container = document.getElementById('spot-grid');
+      if (!container) return;
+      if (sortableInstance) sortableInstance.destroy();
+      sortableInstance = new Sortable(container, {
+        handle: '.drag-handle',
+        animation: 200,
+        onEnd: function() {
+          // ドラッグ終了後、DOMの新しい順序を取得して保存（再描画はしない）
+          const newOrder = Array.from(container.children).map(card => card.getAttribute('data-id'));
+          spotOrder = newOrder;
+          localStorage.setItem('okinawa_spot_order', JSON.stringify(spotOrder));
+        }
+      });
     }
 
     function renderHome() {
@@ -446,18 +441,23 @@
         card.addEventListener('click', (e) => { if(!e.target.closest('.drag-handle')) showDetailView(spot.id); });
         container.appendChild(card);
       });
-      if (window.Sortable) {
-        new Sortable(container, {
-          handle: '.drag-handle',
-          animation: 200,
-          onEnd: function() {
-            const newOrder = Array.from(container.children).map(card => card.getAttribute('data-id'));
-            spotOrder = newOrder;
-            localStorage.setItem('okinawa_spot_order', JSON.stringify(spotOrder));
-            renderHome(); // 再描画して順序確定
-          }
-        });
-      }
+      // 再描画後、Sortableを再初期化
+      initSortable();
+    }
+
+    function updateUILanguage() {
+      const tr = t[currentLang];
+      document.getElementById('app-title').innerText = tr.title;
+      document.getElementById('settings-btn-text').innerText = tr.settingsBtn;
+      document.getElementById('theme-toggle-text').innerText = tr.themeBtn;
+      document.getElementById('save-settings-text').innerText = tr.saveSettings;
+      document.getElementById('close-settings-text').innerText = tr.back;
+      document.getElementById('settings-title').innerText = tr.settingsTitle;
+      document.getElementById('settings-desc').innerText = tr.settingsDesc;
+      document.getElementById('footer-text').innerHTML = `${tr.footerText}<br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a>`;
+      renderHome();
+      const curId = document.getElementById('detail-view').getAttribute('data-spot-id');
+      if (!document.getElementById('home-view').classList.contains('hidden') && curId) showDetailView(curId);
     }
 
     function showDetailView(id) {
@@ -487,6 +487,7 @@
       document.getElementById('back-previous')?.addEventListener('click', () => window.history.back());
       window.history.pushState({ view: 'detail', id }, '', `#${id}`);
     }
+
     function showHomeView() {
       document.getElementById('detail-view').classList.add('hidden');
       document.getElementById('settings-view').classList.add('hidden');
@@ -494,6 +495,7 @@
       window.history.pushState({ view: 'home' }, '', '#home');
       renderHome();
     }
+
     function openSettings() {
       const grid = document.getElementById('settings-grid');
       grid.innerHTML = '';
@@ -506,6 +508,7 @@
       document.getElementById('detail-view').classList.add('hidden');
       document.getElementById('settings-view').classList.remove('hidden');
     }
+
     function saveSettings() {
       spotsData.forEach(spot => {
         const input = document.getElementById(`img_${spot.id}`);
@@ -519,6 +522,7 @@
       alert(t[currentLang].saveSettings);
       showHomeView();
     }
+
     function initLangButtons() {
       const container = document.getElementById('lang-buttons');
       container.innerHTML = '';
@@ -529,6 +533,7 @@
         container.appendChild(btn);
       }
     }
+
     function initTheme() {
       const stored = localStorage.getItem('theme');
       if (stored === 'light') { document.body.classList.remove('dark'); document.body.classList.add('light'); }
@@ -539,11 +544,13 @@
         else { document.body.classList.replace('light', 'dark'); localStorage.setItem('theme', 'dark'); }
       };
     }
+
     function route() {
       const hash = window.location.hash.slice(1);
       if (hash && hash !== 'home' && spotsData.some(s => s.id === hash)) showDetailView(hash);
       else showHomeView();
     }
+
     window.addEventListener('popstate', () => {
       if (!document.getElementById('home-view').classList.contains('hidden')) {
         const id = window.location.hash.slice(1);
@@ -551,7 +558,9 @@
         else showHomeView();
       } else { if (window.location.hash === '#home') showHomeView(); else route(); }
     });
+
     if ('serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(e=>console.log('SW error', e)));
+
     initLangButtons(); initTheme(); renderHome(); route();
     document.getElementById('settings-btn')?.addEventListener('click', openSettings);
     document.getElementById('save-settings')?.addEventListener('click', saveSettings);
